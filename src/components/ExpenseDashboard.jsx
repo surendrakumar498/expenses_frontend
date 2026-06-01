@@ -2,7 +2,14 @@ import "../App.css";
 import React, { useEffect, useState } from "react";
 
 const ExpenseDashboard = () => {
-  const API_URL = "http://localhost:8000/api/expenses";
+  // const API_URL = "expenses-backend-nesy-q50katggs.vercel.app";
+const ExpenseDashboard = () => {
+
+  const BASE_URL =
+    "https://expenses-backend-l7mp.vercel.app";
+
+  const API_URL =
+    `${BASE_URL}/api/expenses`;
 
   const [currentDateTime, setCurrentDateTime] = useState("");
 
@@ -249,6 +256,7 @@ const handleRevisedSubmit = async () => {
             </div>
 
             <div className="table-cell time-wrapper">
+              <label htmlFor="">Time</label>
               <input
                 type="time"
                 className="time-input"
@@ -267,6 +275,7 @@ const handleRevisedSubmit = async () => {
             </div>
 
             <div className="table-cell">
+              <label htmlFor="">Date</label>
               <input
                 type="date"
                 value={originalDate}
@@ -318,9 +327,9 @@ const handleRevisedSubmit = async () => {
                             <button
                               className="preview-btn"
                               onClick={() => {
-                                setPreviewImage(
-                                  `http://localhost:8000/uploads/${item.file}`,
-                                );
+ setPreviewImage(
+  `${BASE_URL}/uploads/${item.file}`
+);
                                 setShowModal(true);
                               }}
                             >
@@ -330,7 +339,7 @@ const handleRevisedSubmit = async () => {
                             {/* DOWNLOAD BUTTON */}
 
                             <a
-                              href={`http://localhost:8000/api/expenses/download/${item.file}`}
+                            href={`${API_URL}/download/${item.file}`}
                               className="download-btn"
                             >
                               Download
@@ -451,9 +460,9 @@ const handleRevisedSubmit = async () => {
                             <button
                               className="preview-btn"
                               onClick={() => {
-                                setPreviewImage(
-                                  `http://localhost:8000/uploads/${item.file}`,
-                                );
+ setPreviewImage(
+  `${BASE_URL}/uploads/${item.file}`
+);
                                 setShowModal(true);
                               }}
                             >
@@ -463,7 +472,7 @@ const handleRevisedSubmit = async () => {
                             {/* DOWNLOAD BUTTON */}
 
                             <a
-                              href={`http://localhost:8000/api/expenses/download/${item.file}`}
+                            href={`${API_URL}/download/${item.file}`}
                               className="download-btn"
                             >
                               Download
