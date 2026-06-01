@@ -2,7 +2,12 @@ import "../App.css";
 import React, { useEffect, useState } from "react";
 
 const ExpenseDashboard = () => {
-  const API_URL = "http://localhost:8000/api/expenses";
+  // const API_URL = "http://localhost:8000/api/expenses";
+
+  const BASE_URL =
+  "https://expenses-backend-nesy-q50katggs.vercel.app";
+
+const API_URL = `${BASE_URL}/api/expenses`;
 
   const [currentDateTime, setCurrentDateTime] = useState("");
 
@@ -271,26 +276,26 @@ const ExpenseDashboard = () => {
                           <div className="action-buttons">
                             {/* VIEW BUTTON */}
 
-                            <button
-                              className="preview-btn"
-                              onClick={() => {
-                                setPreviewImage(
-                                  `http://localhost:8000/uploads/${item.file}`,
-                                );
-                                setShowModal(true);
-                              }}
-                            >
-                              View
-                            </button>
+<button
+  className="preview-btn"
+  onClick={() => {
+    setPreviewImage(
+      `https://expenses-backend.vercel.app/uploads/${item.file}`
+    );
+    setShowModal(true);
+  }}
+>
+  View
+</button>
 
                             {/* DOWNLOAD BUTTON */}
 
                             <a
-                              href={`http://localhost:8000/api/expenses/download/${item.file}`}
-                              className="download-btn"
-                            >
-                              Download
-                            </a>
+  href={`${API_URL}/download/${item.file}`}
+  className="download-btn"
+>
+  Download
+</a>
                           </div>
 
                           <br />
@@ -404,26 +409,26 @@ const ExpenseDashboard = () => {
                           <div className="action-buttons">
                             {/* VIEW BUTTON */}
 
-                            <button
-                              className="preview-btn"
-                              onClick={() => {
-                                setPreviewImage(
-                                  `http://localhost:8000/uploads/${item.file}`,
-                                );
-                                setShowModal(true);
-                              }}
-                            >
-                              View
-                            </button>
+                          <button
+  className="preview-btn"
+  onClick={() => {
+    setPreviewImage(
+      `${BASE_URL}/uploads/${item.file}`
+    );
+    setShowModal(true);
+  }}
+>
+  View
+</button>
 
                             {/* DOWNLOAD BUTTON */}
 
-                            <a
-                              href={`http://localhost:8000/api/expenses/download/${item.file}`}
-                              className="download-btn"
-                            >
-                              Download
-                            </a>
+                           <a
+  href={`${API_URL}/download/${item.file}`}
+  className="download-btn"
+>
+  Download
+</a>
                           </div>
 
                           <br />
