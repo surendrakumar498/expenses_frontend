@@ -2,29 +2,21 @@ import "../App.css";
 import React, { useEffect, useState } from "react";
 
 const ExpenseDashboard = () => {
-  // const API_URL = "expenses-backend-nesy-q50katggs.vercel.app";
-const ExpenseDashboard = () => {
-
-  const BASE_URL =
-    "https://expenses-backend-l7mp.vercel.app";
-
-  const API_URL =
-    `${BASE_URL}/api/expenses`;
+  const API_URL = "http://localhost:8000/api/expenses";
 
   const [currentDateTime, setCurrentDateTime] = useState("");
 
   const [previewImage, setPreviewImage] = useState("");
   const [showModal, setShowModal] = useState(false);
 
-  // ================= ORIGINAL STATES =================
-
+  // ORIGINAL STATES
   const [originalAmount, setOriginalAmount] = useState("");
   const [originalTime, setOriginalTime] = useState("");
   const [originalAmPm, setOriginalAmPm] = useState("AM");
   const [originalDate, setOriginalDate] = useState("");
   const [originalFile, setOriginalFile] = useState(null);
 
-  // ================= REVISED STATES =================
+  // REVISED STATES
 
   const [revisedAmount, setRevisedAmount] = useState("");
   const [revisedTime, setRevisedTime] = useState("");
@@ -32,12 +24,12 @@ const ExpenseDashboard = () => {
   const [revisedDate, setRevisedDate] = useState("");
   const [revisedFile, setRevisedFile] = useState(null);
 
-  // ================= TABLE DATA =================
+  // TABLE DATA 
 
   const [originalData, setOriginalData] = useState([]);
   const [revisedData, setRevisedData] = useState([]);
 
-  // ================= GET ALL EXPENSES =================
+  // GET ALL EXPENSES 
 
   const getExpenses = async () => {
     try {
@@ -58,15 +50,13 @@ const ExpenseDashboard = () => {
     }
   };
 
-  // ================= PAGE LOAD =================
+  // PAGE LOAD
 
   useEffect(() => {
     getExpenses();
   }, []);
 
-  // ================= ORIGINAL SUBMIT =================
-
-// ================= ORIGINAL SUBMIT =================
+// ORIGINAL SUBMIT
 
 const handleOriginalSubmit = async () => {
 
@@ -124,7 +114,7 @@ const handleOriginalSubmit = async () => {
 };
 
 
-// ================= REVISED SUBMIT =================
+// REVISED SUBMIT
 
 const handleRevisedSubmit = async () => {
 
@@ -180,7 +170,7 @@ const handleRevisedSubmit = async () => {
     console.log(error);
   }
 };
-  // ================= DELETE EXPENSE =================
+  // DELETE EXPENSE 
 
   const handleDelete = async (id) => {
     try {
@@ -200,7 +190,7 @@ const handleRevisedSubmit = async () => {
     }
   };
 
-  /*============DYNAMIC CLOCK ============*/
+  /*DYNAMIC CLOCK */
   useEffect(() => {
     const updateDateTime = () => {
       const now = new Date();
@@ -233,7 +223,7 @@ const handleRevisedSubmit = async () => {
       </div>
 
       <div className="table-wrapper">
-        {/* ================= ORIGINAL ================= */}
+        {/*  ORIGINAL  */}
 
         <div className="section">
           <div className="section-title">ORIGINAL</div>
@@ -256,7 +246,6 @@ const handleRevisedSubmit = async () => {
             </div>
 
             <div className="table-cell time-wrapper">
-              <label htmlFor="">Time</label>
               <input
                 type="time"
                 className="time-input"
@@ -275,7 +264,6 @@ const handleRevisedSubmit = async () => {
             </div>
 
             <div className="table-cell">
-              <label htmlFor="">Date</label>
               <input
                 type="date"
                 value={originalDate}
@@ -327,8 +315,8 @@ const handleRevisedSubmit = async () => {
                             <button
                               className="preview-btn"
                               onClick={() => {
- setPreviewImage(
-  `${BASE_URL}/uploads/${item.file}`
+                                setPreviewImage(
+  `http://localhost:8000/uploads/${item.file}`
 );
                                 setShowModal(true);
                               }}
@@ -337,13 +325,14 @@ const handleRevisedSubmit = async () => {
                             </button>
 
                             {/* DOWNLOAD BUTTON */}
-
-                            <a
-                            href={`${API_URL}/download/${item.file}`}
-                              className="download-btn"
-                            >
-                              Download
-                            </a>
+<a
+  href={item.file}
+  target="_blank"
+  rel="noopener noreferrer"
+  className="download-btn"
+>
+  Download
+</a>
                           </div>
 
                           <br />
@@ -368,7 +357,7 @@ const handleRevisedSubmit = async () => {
           </div>
         </div>
 
-        {/* ================= REVISED ================= */}
+        {/*  REVISED  */}
 
         <div className="section">
           <div className="section-title">Revised</div>
@@ -460,8 +449,8 @@ const handleRevisedSubmit = async () => {
                             <button
                               className="preview-btn"
                               onClick={() => {
- setPreviewImage(
-  `${BASE_URL}/uploads/${item.file}`
+                              setPreviewImage(
+  `http://localhost:8000/uploads/${item.file}`
 );
                                 setShowModal(true);
                               }}
@@ -471,12 +460,14 @@ const handleRevisedSubmit = async () => {
 
                             {/* DOWNLOAD BUTTON */}
 
-                            <a
-                            href={`${API_URL}/download/${item.file}`}
-                              className="download-btn"
-                            >
-                              Download
-                            </a>
+                           <a
+  href={item.file}
+  target="_blank"
+  rel="noopener noreferrer"
+  className="download-btn"
+>
+  Download
+</a>
                           </div>
 
                           <br />
@@ -500,7 +491,7 @@ const handleRevisedSubmit = async () => {
           </div>
         </div>
       </div>
-      {/* ================= IMAGE MODAL ================= */}
+      {/* IMAGE MODAL */}
 
       {showModal && (
         <div className="image-modal" onClick={() => setShowModal(false)}>
