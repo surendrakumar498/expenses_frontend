@@ -2,7 +2,7 @@ import "../App.css";
 import React, { useEffect, useState } from "react";
 
 const ExpenseDashboard = () => {
-  const API_URL = "http://localhost:8000/api/expenses";
+  const API_URL = `${import.meta.env.VITE_BACKEND_URL}/api/expenses`;
 
   const [currentDateTime, setCurrentDateTime] = useState("");
 
@@ -316,7 +316,7 @@ const handleRevisedSubmit = async () => {
                               className="preview-btn"
                               onClick={() => {
                                 setPreviewImage(
-  `http://localhost:8000/uploads/${item.file}`
+  `${import.meta.env.VITE_BACKEND_URL}/uploads/${item.file}`
 );
                                 setShowModal(true);
                               }}
@@ -450,7 +450,7 @@ const handleRevisedSubmit = async () => {
                               className="preview-btn"
                               onClick={() => {
                               setPreviewImage(
-  `http://localhost:8000/uploads/${item.file}`
+  `${import.meta.env.VITE_BACKEND_URL}/uploads/${item.file}`
 );
                                 setShowModal(true);
                               }}
