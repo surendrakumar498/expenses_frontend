@@ -316,7 +316,7 @@ const handleRevisedSubmit = async () => {
                               className="preview-btn"
                               onClick={() => {
                                 setPreviewImage(
-  `${import.meta.env.VITE_BACKEND_URL}/uploads/${item.file}`
+  `${item.file}`
 );
                                 setShowModal(true);
                               }}
@@ -336,8 +336,6 @@ const handleRevisedSubmit = async () => {
                           </div>
 
                           <br />
-
-                          <span>{item.file}</span>
                         </>
                       )}
                     </td>
