@@ -95,7 +95,6 @@ const ExpenseDashboard = () => {
 
       if (data.success) {
         await getExpenses();
-
         // Reset Form
         setOriginalAmount("");
         setOriginalTime("");
@@ -161,23 +160,27 @@ const ExpenseDashboard = () => {
   };
   // DELETE EXPENSE
 
-  const handleDelete = async (id) => {
-    try {
-      const response = await fetch(`${API_URL}/delete/${id}`, {
-        method: "DELETE",
-      });
+ const handleDelete = async (id) => {
+  try {
+    const response = await fetch(`${API_URL}/delete/${id}`, {
+      method: "DELETE",
+    });
 
-      const data = await response.json();
+    const data = await response.json();
 
-      if (data.success) {
-        alert("Expense Deleted");
-
-        getExpenses();
-      }
-    } catch (error) {
-      console.log(error);
+    if (data.success) {
+      setOriginalData((prev) =>
+        prev.filter((item) => item._id !== id)
+      );
+      setRevisedData((prev) =>
+        prev.filter((item) => item._id !== id)
+      );
     }
-  };
+
+  } catch (error) {
+    console.log(error);
+  }
+};
 
   /*DYNAMIC CLOCK */
   useEffect(() => {
