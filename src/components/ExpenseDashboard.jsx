@@ -1,6 +1,5 @@
 import "../App.css";
 import React, { useEffect, useState } from "react";
-import { TfiUppercase } from "react-icons/tfi";
 import { MoonLoader } from "react-spinners";
 
 const ExpenseDashboard = () => {
