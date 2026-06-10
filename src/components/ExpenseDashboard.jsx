@@ -56,6 +56,14 @@ const ExpenseDashboard = () => {
     getExpenses();
   }, []);
 
+  // CLOUDINARY DOWNLOAD URL
+const getDownloadUrl = (url) => {
+  return url.replace(
+    "/upload/",
+    "/upload/fl_attachment/"
+  );
+};
+
 // ORIGINAL SUBMIT
 
 const handleOriginalSubmit = async () => {
@@ -326,9 +334,7 @@ const handleRevisedSubmit = async () => {
 
                             {/* DOWNLOAD BUTTON */}
 <a
-  href={item.file}
-  target="_blank"
-  rel="noopener noreferrer"
+  href={getDownloadUrl(item.file)}
   className="download-btn"
 >
   Download
@@ -454,14 +460,12 @@ const handleRevisedSubmit = async () => {
               </button>
 
               {/* DOWNLOAD BUTTON */}
-              <a
-                href={item.file}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="download-btn"
-              >
-                Download
-              </a>
+<a
+  href={getDownloadUrl(item.file)}
+  className="download-btn"
+>
+  Download
+</a>
             </div>
 
             <br />
