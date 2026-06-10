@@ -430,61 +430,56 @@ const handleRevisedSubmit = async () => {
               </thead>
 
               <tbody>
-                {revisedData.map((item, index) => (
-                  <tr key={index}>
-                    <td>{item.amount}</td>
+  {revisedData.map((item, index) => (
+    <tr key={index}>
+      <td>{item.amount}</td>
 
-                    <td>{item.time}</td>
+      <td>{item.time}</td>
 
-                    <td>{item.date}</td>
+      <td>{item.date}</td>
 
-                    <td>
-                      {item.file && (
-                        <>
-                          <div className="action-buttons">
-                            {/* VIEW BUTTON */}
+      <td>
+        {item.file && (
+          <>
+            <div className="action-buttons">
+              {/* VIEW BUTTON */}
+              <button
+                className="preview-btn"
+                onClick={() => {
+                  setPreviewImage(`${item.file}`);
+                  setShowModal(true);
+                }}
+              >
+                View
+              </button>
 
-                            <button
-                              className="preview-btn"
-                              onClick={() => {
-                              setPreviewImage(
-  `${import.meta.env.VITE_BACKEND_URL}/uploads/${item.file}`
-);
-                                setShowModal(true);
-                              }}
-                            >
-                              View
-                            </button>
+              {/* DOWNLOAD BUTTON */}
+              <a
+                href={item.file}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="download-btn"
+              >
+                Download
+              </a>
+            </div>
 
-                            {/* DOWNLOAD BUTTON */}
+            <br />
+          </>
+        )}
+      </td>
 
-                           <a
-  href={item.file}
-  target="_blank"
-  rel="noopener noreferrer"
-  className="download-btn"
->
-  Download
-</a>
-                          </div>
-
-                          <br />
-
-                          <span>{item.file}</span>
-                        </>
-                      )}
-                    </td>
-                    <td>
-                      <button
-                        className="delete-btn"
-                        onClick={() => handleDelete(item._id)}
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
+      <td>
+        <button
+          className="delete-btn"
+          onClick={() => handleDelete(item._id)}
+        >
+          Delete
+        </button>
+      </td>
+    </tr>
+  ))}
+</tbody>
             </table>
           </div>
         </div>
