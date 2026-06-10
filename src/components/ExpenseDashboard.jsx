@@ -192,7 +192,6 @@ const ExpenseDashboard = () => {
         minute: "2-digit",
         second: "2-digit",
         hour12: true,
-        time: "TfiUppercase",
       };
 
       const formattedDateTime = now
