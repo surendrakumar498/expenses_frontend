@@ -204,6 +204,50 @@ table th{
   color: white;
 }
 
+.loader-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999999;
+}
+
+.loader-circle {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  /* Floating Effect */
+  box-shadow: 
+    0 12px 35px rgba(0, 0, 0, 0.45),
+    0 0 25px rgba(255, 255, 255, 0.8);
+
+  transform: translateY(-5px);
+}
+
+/* Date */
+.mobile-label {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobile-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 6px;
+  }
+}
 /* ================= ACTION BUTTONS ================= */
 
 .action-buttons{
@@ -528,6 +572,7 @@ table th{
   .btn-wrapper button{
     padding: 10px;
     font-size: 14px;
+    width: 100%;
   }
 
   .image-modal{

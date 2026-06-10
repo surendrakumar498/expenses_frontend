@@ -1,8 +1,13 @@
 import "../App.css";
 import React, { useEffect, useState } from "react";
+import { TfiUppercase } from "react-icons/tfi";
+import { MoonLoader } from "react-spinners";
 
 const ExpenseDashboard = () => {
   const API_URL = `${import.meta.env.VITE_BACKEND_URL}/api/expenses`;
+
+  const [originalLoading, setOriginalLoading] = useState(false);
+  const [revisedLoading, setRevisedLoading] = useState(false);
 
   const [currentDateTime, setCurrentDateTime] = useState("");
 
@@ -24,12 +29,12 @@ const ExpenseDashboard = () => {
   const [revisedDate, setRevisedDate] = useState("");
   const [revisedFile, setRevisedFile] = useState(null);
 
-  // TABLE DATA 
+  // TABLE DATA
 
   const [originalData, setOriginalData] = useState([]);
   const [revisedData, setRevisedData] = useState([]);
 
-  // GET ALL EXPENSES 
+  // GET ALL EXPENSES
 
   const getExpenses = async () => {
     try {
@@ -57,128 +62,105 @@ const ExpenseDashboard = () => {
   }, []);
 
   // CLOUDINARY DOWNLOAD URL
-const getDownloadUrl = (url) => {
-  return url.replace(
-    "/upload/",
-    "/upload/fl_attachment/"
-  );
-};
+  const getDownloadUrl = (url) => {
+    return url.replace("/upload/", "/upload/fl_attachment/");
+  };
 
-// ORIGINAL SUBMIT
+  // ORIGINAL SUBMIT
 
-const handleOriginalSubmit = async () => {
-
-  // VALIDATION
-
-  if (
-    !originalAmount ||
-    !originalTime ||
-    !originalDate ||
-    !originalFile
-  ) {
-    alert("Please fill all Original fields");
-    return;
-  }
-
-  try {
-
-    const formData = new FormData();
-
-    formData.append("type", "original");
-    formData.append("amount", originalAmount);
-    formData.append(
-      "time",
-      `${originalTime} ${originalAmPm}`
-    );
-    formData.append("date", originalDate);
-    formData.append("file", originalFile);
-
-    const response = await fetch(
-      `${API_URL}/create`,
-      {
-        method: "POST",
-        body: formData,
-      }
-    );
-
-    const data = await response.json();
-
-    if (data.success) {
-
-      getExpenses();
-
-      setOriginalAmount("");
-      setOriginalTime("");
-      setOriginalAmPm("AM");
-      setOriginalDate("");
-      setOriginalFile(null);
-
-      alert("Original Expense Added");
+  const handleOriginalSubmit = async () => {
+    // VALIDATION
+    if (!originalAmount || !originalTime || !originalDate || !originalFile) {
+      alert("Please fill all Original fields");
+      return;
     }
 
-  } catch (error) {
-    console.log(error);
-  }
-};
+    try {
+      // Loader Start
+      setOriginalLoading(true);
 
+      const formData = new FormData();
 
-// REVISED SUBMIT
+      formData.append("type", "original");
+      formData.append("amount", originalAmount);
+      formData.append("time", `${originalTime} ${originalAmPm}`);
+      formData.append("date", originalDate);
+      formData.append("file", originalFile);
 
-const handleRevisedSubmit = async () => {
-
-  // VALIDATION
-
-  if (
-    !revisedAmount ||
-    !revisedTime ||
-    !revisedDate ||
-    !revisedFile
-  ) {
-    alert("Please fill all Revised fields");
-    return;
-  }
-
-  try {
-
-    const formData = new FormData();
-
-    formData.append("type", "revised");
-    formData.append("amount", revisedAmount);
-    formData.append(
-      "time",
-      `${revisedTime} ${revisedAmPm}`
-    );
-    formData.append("date", revisedDate);
-    formData.append("file", revisedFile);
-
-    const response = await fetch(
-      `${API_URL}/create`,
-      {
+      const response = await fetch(`${API_URL}/create`, {
         method: "POST",
         body: formData,
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        await getExpenses();
+
+        // Reset Form
+        setOriginalAmount("");
+        setOriginalTime("");
+        setOriginalAmPm("AM");
+        setOriginalDate("");
+        setOriginalFile(null);
+
+        alert("Original Expense Added");
       }
-    );
+    } catch (error) {
+      console.log(error);
+    } finally {
+      // Loader Stop
+      setOriginalLoading(false);
+    }
+  };
 
-    const data = await response.json();
+  // REVISED SUBMIT
 
-    if (data.success) {
-
-      getExpenses();
-
-      setRevisedAmount("");
-      setRevisedTime("");
-      setRevisedAmPm("AM");
-      setRevisedDate("");
-      setRevisedFile(null);
-
-      alert("Revised Expense Added");
+  const handleRevisedSubmit = async () => {
+    // VALIDATION
+    if (!revisedAmount || !revisedTime || !revisedDate || !revisedFile) {
+      alert("Please fill all Revised fields");
+      return;
     }
 
-  } catch (error) {
-    console.log(error);
-  }
-};
-  // DELETE EXPENSE 
+    try {
+      // Loader Start
+      setRevisedLoading(true);
+
+      const formData = new FormData();
+
+      formData.append("type", "revised");
+      formData.append("amount", revisedAmount);
+      formData.append("time", `${revisedTime} ${revisedAmPm}`);
+      formData.append("date", revisedDate);
+      formData.append("file", revisedFile);
+
+      const response = await fetch(`${API_URL}/create`, {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        await getExpenses();
+
+        // Reset Form
+        setRevisedAmount("");
+        setRevisedTime("");
+        setRevisedAmPm("AM");
+        setRevisedDate("");
+        setRevisedFile(null);
+
+        alert("Revised Expense Added");
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setRevisedLoading(false);
+    }
+  };
+  // DELETE EXPENSE
 
   const handleDelete = async (id) => {
     try {
@@ -210,9 +192,13 @@ const handleRevisedSubmit = async () => {
         minute: "2-digit",
         second: "2-digit",
         hour12: true,
+        time: "TfiUppercase",
       };
 
-      const formattedDateTime = now.toLocaleString("en-IN", options);
+      const formattedDateTime = now
+        .toLocaleString("en-IN", options)
+        .replace("am", "AM")
+        .replace("pm", "PM");
       setCurrentDateTime(formattedDateTime);
     };
 
@@ -224,6 +210,13 @@ const handleRevisedSubmit = async () => {
 
   return (
     <div className="memo-container">
+      {(originalLoading || revisedLoading) && (
+        <div className="loader-overlay">
+          <div className="loader-circle">
+            <MoonLoader size={55} color="#4a3aff" speedMultiplier={1} />
+          </div>
+        </div>
+      )}
       <div className="top-header">
         <span className="memo-title">Finance Tracker</span>
 
@@ -254,13 +247,14 @@ const handleRevisedSubmit = async () => {
             </div>
 
             <div className="table-cell time-wrapper">
+              <label className="mobile-label">Time</label>
+
               <input
                 type="time"
                 className="time-input"
                 value={originalTime}
                 onChange={(e) => setOriginalTime(e.target.value)}
               />
-
               <select
                 className="am-pm-select"
                 value={originalAmPm}
@@ -272,6 +266,8 @@ const handleRevisedSubmit = async () => {
             </div>
 
             <div className="table-cell">
+              <label className="mobile-label">Date</label>
+
               <input
                 type="date"
                 value={originalDate}
@@ -290,7 +286,9 @@ const handleRevisedSubmit = async () => {
           </div>
 
           <div className="btn-wrapper">
-            <button onClick={handleOriginalSubmit}>Submit</button>
+            <button onClick={handleOriginalSubmit} disabled={originalLoading}>
+              Submit
+            </button>
           </div>
 
           <div className="data-table-wrapper">
@@ -323,9 +321,7 @@ const handleRevisedSubmit = async () => {
                             <button
                               className="preview-btn"
                               onClick={() => {
-                                setPreviewImage(
-  `${item.file}`
-);
+                                setPreviewImage(`${item.file}`);
                                 setShowModal(true);
                               }}
                             >
@@ -333,12 +329,12 @@ const handleRevisedSubmit = async () => {
                             </button>
 
                             {/* DOWNLOAD BUTTON */}
-<a
-  href={getDownloadUrl(item.file)}
-  className="download-btn"
->
-  Download
-</a>
+                            <a
+                              href={getDownloadUrl(item.file)}
+                              className="download-btn"
+                            >
+                              Download
+                            </a>
                           </div>
 
                           <br />
@@ -420,7 +416,9 @@ const handleRevisedSubmit = async () => {
           </div>
 
           <div className="btn-wrapper">
-            <button onClick={handleRevisedSubmit}>Submit</button>
+            <button onClick={handleRevisedSubmit} disabled={revisedLoading}>
+              Submit
+            </button>
           </div>
 
           <div className="data-table-wrapper">
@@ -436,54 +434,54 @@ const handleRevisedSubmit = async () => {
               </thead>
 
               <tbody>
-  {revisedData.map((item, index) => (
-    <tr key={index}>
-      <td>{item.amount}</td>
+                {revisedData.map((item, index) => (
+                  <tr key={index}>
+                    <td>{item.amount}</td>
 
-      <td>{item.time}</td>
+                    <td>{item.time}</td>
 
-      <td>{item.date}</td>
+                    <td>{item.date}</td>
 
-      <td>
-        {item.file && (
-          <>
-            <div className="action-buttons">
-              {/* VIEW BUTTON */}
-              <button
-                className="preview-btn"
-                onClick={() => {
-                  setPreviewImage(`${item.file}`);
-                  setShowModal(true);
-                }}
-              >
-                View
-              </button>
+                    <td>
+                      {item.file && (
+                        <>
+                          <div className="action-buttons">
+                            {/* VIEW BUTTON */}
+                            <button
+                              className="preview-btn"
+                              onClick={() => {
+                                setPreviewImage(`${item.file}`);
+                                setShowModal(true);
+                              }}
+                            >
+                              View
+                            </button>
 
-              {/* DOWNLOAD BUTTON */}
-<a
-  href={getDownloadUrl(item.file)}
-  className="download-btn"
->
-  Download
-</a>
-            </div>
+                            {/* DOWNLOAD BUTTON */}
+                            <a
+                              href={getDownloadUrl(item.file)}
+                              className="download-btn"
+                            >
+                              Download
+                            </a>
+                          </div>
 
-            <br />
-          </>
-        )}
-      </td>
+                          <br />
+                        </>
+                      )}
+                    </td>
 
-      <td>
-        <button
-          className="delete-btn"
-          onClick={() => handleDelete(item._id)}
-        >
-          Delete
-        </button>
-      </td>
-    </tr>
-  ))}
-</tbody>
+                    <td>
+                      <button
+                        className="delete-btn"
+                        onClick={() => handleDelete(item._id)}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
             </table>
           </div>
         </div>
