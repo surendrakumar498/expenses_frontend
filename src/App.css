@@ -381,6 +381,53 @@ table th{
   transform: rotate(90deg);
 }
 
+/* EDIT BUTTON */
+.edit-btn {
+  background-color: #4a3aff;
+  color: #fff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.edit-btn:hover {
+  background-color: #372bd6;
+}
+
+/* CANCEL BUTTON (edit mode) */
+.cancel-btn {
+  background-color: #e0e0e0;
+  color: #333;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-left: 10px;
+  transition: background-color 0.2s ease;
+}
+
+.cancel-btn:hover {
+  background-color: #cccccc;
+}
+
+/* ACTION BUTTONS WRAPPER (Edit + Delete ek row me) */
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* BTN WRAPPER already exists for Submit — cancel button ke liye alignment */
+.btn-wrapper {
+  display: flex;
+  align-items: center;
+}
+
 /* ================= ANIMATION ================= */
 
 @keyframes fadeIn{

@@ -28,10 +28,21 @@ const ExpenseDashboard = () => {
   const [revisedDate, setRevisedDate] = useState("");
   const [revisedFile, setRevisedFile] = useState(null);
 
+  // EDIT MODE STATES (naya)
+  const [editingOriginalId, setEditingOriginalId] = useState(null);
+  const [editingRevisedId, setEditingRevisedId] = useState(null);
+
   // TABLE DATA
 
   const [originalData, setOriginalData] = useState([]);
   const [revisedData, setRevisedData] = useState([]);
+
+  // TOTALS (derived from table data)
+  const getTotal = (data) =>
+    data.reduce((sum, item) => sum + (parseFloat(item.amount) || 0), 0);
+
+  const originalTotal = getTotal(originalData);
+  const revisedTotal = getTotal(revisedData);
 
   // GET ALL EXPENSES
 
@@ -65,11 +76,49 @@ const ExpenseDashboard = () => {
     return url.replace("/upload/", "/upload/fl_attachment/");
   };
 
-  // ORIGINAL SUBMIT
+  // Helper: split "hh:mm AM/PM" style time string back into time + ampm
+  const splitTime = (timeStr = "") => {
+    const parts = timeStr.trim().split(" ");
+    if (parts.length === 2) {
+      return { time: parts[0], ampm: parts[1].toUpperCase() };
+    }
+    return { time: timeStr, ampm: "AM" };
+  };
+
+  // ============ ORIGINAL: EDIT / SUBMIT / CANCEL ============
+
+  // EDIT BUTTON CLICK -> POPULATE FORM
+  const handleEditOriginal = (item) => {
+    const { time, ampm } = splitTime(item.time);
+
+    setOriginalAmount(item.amount);
+    setOriginalTime(time);
+    setOriginalAmPm(ampm);
+    setOriginalDate(item.date);
+    setOriginalFile(null); // naya file optional hai, purana file backend me retain hoga
+    setEditingOriginalId(item._id);
+  };
+
+  // CANCEL EDIT
+  const handleCancelEditOriginal = () => {
+    setOriginalAmount("");
+    setOriginalTime("");
+    setOriginalAmPm("AM");
+    setOriginalDate("");
+    setOriginalFile(null);
+    setEditingOriginalId(null);
+  };
+
+  // ORIGINAL SUBMIT (CREATE OR UPDATE)
 
   const handleOriginalSubmit = async () => {
-    // VALIDATION
-    if (!originalAmount || !originalTime || !originalDate || !originalFile) {
+    // VALIDATION - edit mode me file optional hai
+    if (
+      !originalAmount ||
+      !originalTime ||
+      !originalDate ||
+      (!editingOriginalId && !originalFile)
+    ) {
       alert("Please fill all Original fields");
       return;
     }
@@ -84,12 +133,28 @@ const ExpenseDashboard = () => {
       formData.append("amount", originalAmount);
       formData.append("time", `${originalTime} ${originalAmPm}`);
       formData.append("date", originalDate);
-      formData.append("file", originalFile);
+      if (originalFile) {
+        formData.append("file", originalFile);
+      }
 
-      const response = await fetch(`${API_URL}/create`, {
-        method: "POST",
-        body: formData,
-      });
+      const isEditing = Boolean(editingOriginalId);
+
+      const response = await fetch(
+        isEditing ? `${API_URL}/update/${editingOriginalId}` : `${API_URL}/create`,
+        {
+          method: isEditing ? "PUT" : "POST",
+          body: formData,
+        }
+      );
+
+      // Agar route hi exist nahi karta (404) ya server error (500) aaye
+      if (!response.ok) {
+        console.log(`Request failed with status ${response.status}`);
+        alert(
+          `Update failed (status ${response.status}). Check karo ki backend me PUT /update/:id route bana hai ya nahi.`
+        );
+        return;
+      }
 
       const data = await response.json();
 
@@ -101,22 +166,53 @@ const ExpenseDashboard = () => {
         setOriginalAmPm("AM");
         setOriginalDate("");
         setOriginalFile(null);
+        setEditingOriginalId(null);
 
-        alert("Original Expense Added");
+        alert(isEditing ? "Original Expense Updated" : "Original Expense Added");
+      } else {
+        alert(data.message || "Something went wrong");
       }
     } catch (error) {
       console.log(error);
+      alert("Request failed: " + error.message);
     } finally {
       // Loader Stop
       setOriginalLoading(false);
     }
   };
 
-  // REVISED SUBMIT
+  // ============ REVISED: EDIT / SUBMIT / CANCEL ============
+
+  const handleEditRevised = (item) => {
+    const { time, ampm } = splitTime(item.time);
+
+    setRevisedAmount(item.amount);
+    setRevisedTime(time);
+    setRevisedAmPm(ampm);
+    setRevisedDate(item.date);
+    setRevisedFile(null);
+    setEditingRevisedId(item._id);
+  };
+
+  const handleCancelEditRevised = () => {
+    setRevisedAmount("");
+    setRevisedTime("");
+    setRevisedAmPm("AM");
+    setRevisedDate("");
+    setRevisedFile(null);
+    setEditingRevisedId(null);
+  };
+
+  // REVISED SUBMIT (CREATE OR UPDATE)
 
   const handleRevisedSubmit = async () => {
-    // VALIDATION
-    if (!revisedAmount || !revisedTime || !revisedDate || !revisedFile) {
+    // VALIDATION - edit mode me file optional hai
+    if (
+      !revisedAmount ||
+      !revisedTime ||
+      !revisedDate ||
+      (!editingRevisedId && !revisedFile)
+    ) {
       alert("Please fill all Revised fields");
       return;
     }
@@ -131,12 +227,28 @@ const ExpenseDashboard = () => {
       formData.append("amount", revisedAmount);
       formData.append("time", `${revisedTime} ${revisedAmPm}`);
       formData.append("date", revisedDate);
-      formData.append("file", revisedFile);
+      if (revisedFile) {
+        formData.append("file", revisedFile);
+      }
 
-      const response = await fetch(`${API_URL}/create`, {
-        method: "POST",
-        body: formData,
-      });
+      const isEditing = Boolean(editingRevisedId);
+
+      const response = await fetch(
+        isEditing ? `${API_URL}/update/${editingRevisedId}` : `${API_URL}/create`,
+        {
+          method: isEditing ? "PUT" : "POST",
+          body: formData,
+        }
+      );
+
+      // Agar route hi exist nahi karta (404) ya server error (500) aaye
+      if (!response.ok) {
+        console.log(`Request failed with status ${response.status}`);
+        alert(
+          `Update failed (status ${response.status}). Check karo ki backend me PUT /update/:id route bana hai ya nahi.`
+        );
+        return;
+      }
 
       const data = await response.json();
 
@@ -149,38 +261,41 @@ const ExpenseDashboard = () => {
         setRevisedAmPm("AM");
         setRevisedDate("");
         setRevisedFile(null);
+        setEditingRevisedId(null);
 
-        alert("Revised Expense Added");
+        alert(isEditing ? "Revised Expense Updated" : "Revised Expense Added");
+      } else {
+        alert(data.message || "Something went wrong");
       }
     } catch (error) {
       console.log(error);
+      alert("Request failed: " + error.message);
     } finally {
       setRevisedLoading(false);
     }
   };
   // DELETE EXPENSE
 
- const handleDelete = async (id) => {
-  try {
-    const response = await fetch(`${API_URL}/delete/${id}`, {
-      method: "DELETE",
-    });
+  const handleDelete = async (id) => {
+    try {
+      const response = await fetch(`${API_URL}/delete/${id}`, {
+        method: "DELETE",
+      });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (data.success) {
-      setOriginalData((prev) =>
-        prev.filter((item) => item._id !== id)
-      );
-      setRevisedData((prev) =>
-        prev.filter((item) => item._id !== id)
-      );
+      if (data.success) {
+        setOriginalData((prev) => prev.filter((item) => item._id !== id));
+        setRevisedData((prev) => prev.filter((item) => item._id !== id));
+
+        // Agar delete hui entry hi edit ho rahi thi, form reset kar do
+        if (editingOriginalId === id) handleCancelEditOriginal();
+        if (editingRevisedId === id) handleCancelEditRevised();
+      }
+    } catch (error) {
+      console.log(error);
     }
-
-  } catch (error) {
-    console.log(error);
-  }
-};
+  };
 
   /*DYNAMIC CLOCK */
   useEffect(() => {
@@ -283,19 +398,34 @@ const ExpenseDashboard = () => {
               />
 
               {originalFile && <p className="file-name">{originalFile.name}</p>}
+              {editingOriginalId && !originalFile && (
+                <p className="file-name">(Purani file rahegi agar nayi na choose ki)</p>
+              )}
             </div>
           </div>
 
           <div className="btn-wrapper">
             <button onClick={handleOriginalSubmit} disabled={originalLoading}>
-              Submit
+              {editingOriginalId ? "Update" : "Submit"}
             </button>
+
+            {editingOriginalId && (
+              <button
+                type="button"
+                className="cancel-btn"
+                onClick={handleCancelEditOriginal}
+                disabled={originalLoading}
+              >
+                Cancel
+              </button>
+            )}
           </div>
 
           <div className="data-table-wrapper">
             <table>
               <thead>
                 <tr>
+                  <th>S.No</th>
                   <th>Amount</th>
                   <th>Time</th>
                   <th>Date</th>
@@ -307,6 +437,8 @@ const ExpenseDashboard = () => {
               <tbody>
                 {originalData.map((item, index) => (
                   <tr key={index}>
+                    <td>{index + 1}</td>
+
                     <td>{item.amount}</td>
 
                     <td>{item.time}</td>
@@ -344,16 +476,39 @@ const ExpenseDashboard = () => {
                     </td>
 
                     <td>
-                      <button
-                        className="delete-btn"
-                        onClick={() => handleDelete(item._id)}
-                      >
-                        Delete
-                      </button>
+                      <div className="action-buttons">
+                        <button
+                          className="edit-btn"
+                          onClick={() => handleEditOriginal(item)}
+                        >
+                          Edit
+                        </button>
+
+                        <button
+                          className="delete-btn"
+                          onClick={() => handleDelete(item._id)}
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
               </tbody>
+
+              {originalData.length > 0 && (
+                <tfoot>
+                  <tr className="total-row">
+                    <td colSpan={1} style={{ fontWeight: "bold" }}>
+                      Total
+                    </td>
+                    <td style={{ fontWeight: "bold" }}>
+                      {originalTotal.toFixed(2)}
+                    </td>
+                    <td colSpan={4}></td>
+                  </tr>
+                </tfoot>
+              )}
             </table>
           </div>
         </div>
@@ -413,19 +568,34 @@ const ExpenseDashboard = () => {
               />
 
               {revisedFile && <p className="file-name">{revisedFile.name}</p>}
+              {editingRevisedId && !revisedFile && (
+                <p className="file-name">(Purani file rahegi agar nayi na choose ki)</p>
+              )}
             </div>
           </div>
 
           <div className="btn-wrapper">
             <button onClick={handleRevisedSubmit} disabled={revisedLoading}>
-              Submit
+              {editingRevisedId ? "Update" : "Submit"}
             </button>
+
+            {editingRevisedId && (
+              <button
+                type="button"
+                className="cancel-btn"
+                onClick={handleCancelEditRevised}
+                disabled={revisedLoading}
+              >
+                Cancel
+              </button>
+            )}
           </div>
 
           <div className="data-table-wrapper">
             <table>
               <thead>
                 <tr>
+                  <th>S.No</th>
                   <th>Amount</th>
                   <th>Time</th>
                   <th>Date</th>
@@ -437,6 +607,8 @@ const ExpenseDashboard = () => {
               <tbody>
                 {revisedData.map((item, index) => (
                   <tr key={index}>
+                    <td>{index + 1}</td>
+
                     <td>{item.amount}</td>
 
                     <td>{item.time}</td>
@@ -473,16 +645,39 @@ const ExpenseDashboard = () => {
                     </td>
 
                     <td>
-                      <button
-                        className="delete-btn"
-                        onClick={() => handleDelete(item._id)}
-                      >
-                        Delete
-                      </button>
+                      <div className="action-buttons">
+                        <button
+                          className="edit-btn"
+                          onClick={() => handleEditRevised(item)}
+                        >
+                          Edit
+                        </button>
+
+                        <button
+                          className="delete-btn"
+                          onClick={() => handleDelete(item._id)}
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
               </tbody>
+
+              {revisedData.length > 0 && (
+                <tfoot>
+                  <tr className="total-row">
+                    <td colSpan={1} style={{ fontWeight: "bold" }}>
+                      Total
+                    </td>
+                    <td style={{ fontWeight: "bold" }}>
+                      {revisedTotal.toFixed(2)}
+                    </td>
+                    <td colSpan={4}></td>
+                  </tr>
+                </tfoot>
+              )}
             </table>
           </div>
         </div>
