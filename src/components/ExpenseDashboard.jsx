@@ -1,9 +1,15 @@
 import "../App.css";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { MoonLoader } from "react-spinners";
 
-const ExpenseDashboard = () => {
+const ExpenseDashboard = ({ user, onLogout }) => {
   const API_URL = `${import.meta.env.VITE_BACKEND_URL}/api/expenses`;
+
+  // Har request me bhejne wala Authorization header
+  const authHeader = () => {
+    const token = localStorage.getItem("token");
+    return token ? { Authorization: `Bearer ${token}` } : {};
+  };
 
   const [originalLoading, setOriginalLoading] = useState(false);
   const [revisedLoading, setRevisedLoading] = useState(false);
@@ -12,6 +18,10 @@ const ExpenseDashboard = () => {
 
   const [previewImage, setPreviewImage] = useState("");
   const [showModal, setShowModal] = useState(false);
+
+  // USER ICON POPUP (naya)
+  const [showUserMenu, setShowUserMenu] = useState(false);
+  const userMenuRef = useRef(null);
 
   // ORIGINAL STATES
   const [originalAmount, setOriginalAmount] = useState("");
@@ -48,7 +58,15 @@ const ExpenseDashboard = () => {
 
   const getExpenses = async () => {
     try {
-      const response = await fetch(`${API_URL}/all`);
+      const response = await fetch(`${API_URL}/all`, {
+        headers: { ...authHeader() },
+      });
+
+      // Token expire ya invalid ho gaya to auto logout
+      if (response.status === 401) {
+        onLogout();
+        return;
+      }
 
       const data = await response.json();
 
@@ -69,6 +87,18 @@ const ExpenseDashboard = () => {
 
   useEffect(() => {
     getExpenses();
+  }, []);
+
+  // USER MENU: BAHAR CLICK KARNE PE BAND HO JAYE
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target)) {
+        setShowUserMenu(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   // CLOUDINARY DOWNLOAD URL
@@ -143,9 +173,15 @@ const ExpenseDashboard = () => {
         isEditing ? `${API_URL}/update/${editingOriginalId}` : `${API_URL}/create`,
         {
           method: isEditing ? "PUT" : "POST",
+          headers: { ...authHeader() },
           body: formData,
         }
       );
+
+      if (response.status === 401) {
+        onLogout();
+        return;
+      }
 
       // Agar route hi exist nahi karta (404) ya server error (500) aaye
       if (!response.ok) {
@@ -237,9 +273,15 @@ const ExpenseDashboard = () => {
         isEditing ? `${API_URL}/update/${editingRevisedId}` : `${API_URL}/create`,
         {
           method: isEditing ? "PUT" : "POST",
+          headers: { ...authHeader() },
           body: formData,
         }
       );
+
+      if (response.status === 401) {
+        onLogout();
+        return;
+      }
 
       // Agar route hi exist nahi karta (404) ya server error (500) aaye
       if (!response.ok) {
@@ -280,7 +322,13 @@ const ExpenseDashboard = () => {
     try {
       const response = await fetch(`${API_URL}/delete/${id}`, {
         method: "DELETE",
+        headers: { ...authHeader() },
       });
+
+      if (response.status === 401) {
+        onLogout();
+        return;
+      }
 
       const data = await response.json();
 
@@ -336,7 +384,33 @@ const ExpenseDashboard = () => {
       <div className="top-header">
         <span className="memo-title">Finance Tracker</span>
 
-        <span className="live-date-time">{currentDateTime}</span>
+        <div className="header-right">
+          <span className="live-date-time">{currentDateTime}</span>
+
+          <div className="user-menu-wrapper" ref={userMenuRef}>
+            <button
+              className="user-icon-btn"
+              onClick={() => setShowUserMenu((prev) => !prev)}
+            >
+              {user?.name ? user.name.charAt(0).toUpperCase() : "👤"}
+            </button>
+
+            {showUserMenu && (
+              <div className="user-menu-popup">
+                {user?.name && (
+                  <p className="user-menu-name">{user.name}</p>
+                )}
+                {user?.email && (
+                  <p className="user-menu-email">{user.email}</p>
+                )}
+
+                <button className="logout-btn" onClick={onLogout}>
+                  Logout
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
 
       <div className="table-wrapper">
