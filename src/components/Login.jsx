@@ -2,7 +2,7 @@ import "../App.css";
 import React, { useState } from "react";
 import { MoonLoader } from "react-spinners";
 
-const Login = ({ onLoginSuccess, switchToRegister }) => {
+const Login = ({ onLoginSuccess, switchToRegister, switchToForgot }) => {
   const API_URL = `${import.meta.env.VITE_BACKEND_URL}/api/auth`;
 
   const [email, setEmail] = useState("");
@@ -96,9 +96,13 @@ const Login = ({ onLoginSuccess, switchToRegister }) => {
           {loading ? "Logging in..." : "Login"}
         </button>
 
-        <p className="auth-switch">
+       <p className="auth-switch">
         Don't have an account?{" "}
           <span onClick={switchToRegister}>Register Here</span>
+        </p>
+
+        <p className="auth-switch">
+          <span onClick={switchToForgot}>Forgot Password?</span>
         </p>
       </form>
     </div>

@@ -1,3 +1,4 @@
+import ForgotPassword from "./components/ForgotPassword";
 import React, { useState } from "react";
 import Login from "./components/Login";
 import Register from "./components/Register";
@@ -10,7 +11,9 @@ const App = () => {
     const stored = localStorage.getItem("user");
     return stored ? JSON.parse(stored) : null;
   });
-  const [showRegister, setShowRegister] = useState(false);
+
+  // "login" | "register" | "forgot" — teeno mein se ek hi dikhega
+  const [view, setView] = useState("login");
 
   const handleAuthSuccess = (newToken, newUser) => {
     localStorage.setItem("token", newToken);
@@ -24,20 +27,28 @@ const App = () => {
     localStorage.removeItem("user");
     setToken("");
     setUser(null);
+    setView("login");
   };
 
   // JAB TAK LOGIN NAHI, TAB TAK DASHBOARD DIKHEGA HI NAHI
   if (!token) {
-    return showRegister ? (
-      <Register
-        onRegisterSuccess={handleAuthSuccess}
-        switchToLogin={() => setShowRegister(false)}
-      />
-    ) : (
-      <Login
-        onLoginSuccess={handleAuthSuccess}
-        switchToRegister={() => setShowRegister(true)}
-      />
+    if (view === "register") {
+      return (
+        <Register
+          onRegisterSuccess={handleAuthSuccess}
+          switchToLogin={() => setView("login")}
+        />
+      );
+    }
+    if (view === "forgot") {
+      return <ForgotPassword switchToLogin={() => setView("login")} />;
+    }
+    return (
+     <Login
+  onLoginSuccess={handleAuthSuccess}
+  switchToRegister={() => setView("register")}
+  switchToForgot={() => setView("forgot")}
+/>
     );
   }
 
