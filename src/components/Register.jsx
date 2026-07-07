@@ -61,7 +61,7 @@ const Register = ({ onRegisterSuccess, switchToLogin }) => {
         confirmButtonColor: "#4a3aff",
       });
 
-      onRegisterSuccess(data.token, data.user);
+     switchToLogin();
     } catch (err) {
       console.log(err);
       setError("Something went wrong. Try again.");
@@ -122,7 +122,7 @@ const Register = ({ onRegisterSuccess, switchToLogin }) => {
         </button>
 
         <p className="auth-switch">
-       Already have an account? <span onClick={switchToLogin}>Login karo</span>
+       Already have an account? <span onClick={switchToLogin}>Login</span>
         </p>
       </form>
     </div>
