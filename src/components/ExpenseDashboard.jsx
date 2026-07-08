@@ -154,7 +154,7 @@ const ExpenseDashboard = ({ user, onLogout }) => {
     setOriginalTime(time);
     setOriginalAmPm(ampm);
     setOriginalDate(item.date);
-    setOriginalFile(null); // naya file optional hai, purana file backend me retain hoga
+    setOriginalFile(null); 
     setEditingOriginalId(item._id);
   };
 
