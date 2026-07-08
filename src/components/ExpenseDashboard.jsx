@@ -2,6 +2,8 @@ import "../App.css";
 import React, { useEffect, useState, useRef } from "react";
 import { MoonLoader } from "react-spinners";
 
+const ITEMS_PER_PAGE = 5;
+
 const ExpenseDashboard = ({ user, onLogout }) => {
   const API_URL = `${import.meta.env.VITE_BACKEND_URL}/api/expenses`;
 
@@ -47,12 +49,39 @@ const ExpenseDashboard = ({ user, onLogout }) => {
   const [originalData, setOriginalData] = useState([]);
   const [revisedData, setRevisedData] = useState([]);
 
+  // PAGINATION STATES (naya)
+  const [originalPage, setOriginalPage] = useState(1);
+  const [revisedPage, setRevisedPage] = useState(1);
+
   // TOTALS (derived from table data)
   const getTotal = (data) =>
     data.reduce((sum, item) => sum + (parseFloat(item.amount) || 0), 0);
 
   const originalTotal = getTotal(originalData);
   const revisedTotal = getTotal(revisedData);
+
+  // PAGINATION HELPERS (naya)
+  const getTotalPages = (data) => Math.max(1, Math.ceil(data.length / ITEMS_PER_PAGE));
+
+  const getPageData = (data, page) => {
+    const start = (page - 1) * ITEMS_PER_PAGE;
+    return data.slice(start, start + ITEMS_PER_PAGE);
+  };
+
+  const originalTotalPages = getTotalPages(originalData);
+  const revisedTotalPages = getTotalPages(revisedData);
+
+  const paginatedOriginalData = getPageData(originalData, originalPage);
+  const paginatedRevisedData = getPageData(revisedData, revisedPage);
+
+  // Agar data delete/update hone ke baad current page khaali ho jaye, to pichhle page pe chala jaye
+  useEffect(() => {
+    if (originalPage > originalTotalPages) setOriginalPage(originalTotalPages);
+  }, [originalData, originalPage, originalTotalPages]);
+
+  useEffect(() => {
+    if (revisedPage > revisedTotalPages) setRevisedPage(revisedTotalPages);
+  }, [revisedData, revisedPage, revisedTotalPages]);
 
   // GET ALL EXPENSES
 
@@ -509,9 +538,9 @@ const ExpenseDashboard = ({ user, onLogout }) => {
               </thead>
 
               <tbody>
-                {originalData.map((item, index) => (
+                {paginatedOriginalData.map((item, index) => (
                   <tr key={index}>
-                    <td>{index + 1}</td>
+                    <td>{(originalPage - 1) * ITEMS_PER_PAGE + index + 1}</td>
 
                     <td>{item.amount}</td>
 
@@ -585,6 +614,29 @@ const ExpenseDashboard = ({ user, onLogout }) => {
               )}
             </table>
           </div>
+
+          {/* PAGINATION CONTROLS (naya) */}
+          {originalData.length > ITEMS_PER_PAGE && (
+            <div className="pagination-controls">
+              <button
+                onClick={() => setOriginalPage((p) => Math.max(1, p - 1))}
+                disabled={originalPage === 1}
+              >
+                Prev
+              </button>
+
+              <span className="pagination-info">
+                Page {originalPage} of {originalTotalPages}
+              </span>
+
+              <button
+                onClick={() => setOriginalPage((p) => Math.min(originalTotalPages, p + 1))}
+                disabled={originalPage === originalTotalPages}
+              >
+                Next
+              </button>
+            </div>
+          )}
         </div>
 
         {/*  REVISED  */}
@@ -679,9 +731,9 @@ const ExpenseDashboard = ({ user, onLogout }) => {
               </thead>
 
               <tbody>
-                {revisedData.map((item, index) => (
+                {paginatedRevisedData.map((item, index) => (
                   <tr key={index}>
-                    <td>{index + 1}</td>
+                    <td>{(revisedPage - 1) * ITEMS_PER_PAGE + index + 1}</td>
 
                     <td>{item.amount}</td>
 
@@ -754,6 +806,29 @@ const ExpenseDashboard = ({ user, onLogout }) => {
               )}
             </table>
           </div>
+
+          {/* PAGINATION CONTROLS (naya) */}
+          {revisedData.length > ITEMS_PER_PAGE && (
+            <div className="pagination-controls">
+              <button
+                onClick={() => setRevisedPage((p) => Math.max(1, p - 1))}
+                disabled={revisedPage === 1}
+              >
+                Prev
+              </button>
+
+              <span className="pagination-info">
+                Page {revisedPage} of {revisedTotalPages}
+              </span>
+
+              <button
+                onClick={() => setRevisedPage((p) => Math.min(revisedTotalPages, p + 1))}
+                disabled={revisedPage === revisedTotalPages}
+              >
+                Next
+              </button>
+            </div>
+          )}
         </div>
       </div>
       {/* IMAGE MODAL */}
