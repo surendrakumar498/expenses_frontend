@@ -913,6 +913,176 @@ table th{
 }
 /* end  */
 
+
+/* ===== Users Admin Page ===== */
+
+.users-admin-page {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px 60px;
+  animation: fadeIn 0.3s ease;
+}
+
+.users-admin-header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 28px;
+}
+
+.users-admin-back {
+  color: #4a3aff;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  width: fit-content;
+  transition: opacity 0.2s ease;
+}
+
+.users-admin-back:hover {
+  opacity: 0.7;
+}
+
+.users-admin-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 28px;
+  margin: 0;
+}
+
+.users-admin-count {
+  background: #4a3aff;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 3px 12px;
+  border-radius: 999px;
+}
+
+.users-admin-empty {
+  text-align: center;
+  padding: 60px 0;
+  color: #888;
+  font-size: 15px;
+}
+
+/* Responsive grid: cards wrap nicely on wide screens, stack on mobile */
+.users-admin-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.user-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px 18px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  animation: slideUp 0.35s ease both;
+}
+
+.user-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.user-card-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0; /* text ellipsis ke liye zaroori */
+}
+
+.user-avatar {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.user-avatar-placeholder {
+  background: linear-gradient(135deg, #4a3aff, #7b6bff);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.user-text {
+  min-width: 0;
+}
+
+.user-name {
+  font-weight: 600;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-email {
+  font-size: 13px;
+  color: #777;
+  margin: 2px 0 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-delete-btn {
+  flex-shrink: 0;
+  background: #fdeceb;
+  color: #e74c3c;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
+}
+
+.user-delete-btn:hover:not(:disabled) {
+  background: #e74c3c;
+  color: #fff;
+}
+
+.user-delete-btn:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+.user-delete-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ===== Animations ===== */
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Responsive */
 
 @media (max-width:480px){

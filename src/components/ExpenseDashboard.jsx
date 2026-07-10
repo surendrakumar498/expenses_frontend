@@ -4,7 +4,7 @@ import { MoonLoader } from "react-spinners";
 
 const ITEMS_PER_PAGE = 5;
 
-const ExpenseDashboard = ({ user, onLogout }) => {
+const ExpenseDashboard = ({ user, onLogout, onOpenUsers }) => {
   const API_URL = `${import.meta.env.VITE_BACKEND_URL}/api/expenses`;
 
   // Har request me bhejne wala Authorization header
@@ -426,11 +426,13 @@ const ExpenseDashboard = ({ user, onLogout }) => {
 
             {showUserMenu && (
               <div className="user-menu-popup">
-                {user?.name && (
-                  <p className="user-menu-name">{user.name}</p>
-                )}
-                {user?.email && (
-                  <p className="user-menu-email">{user.email}</p>
+                {user?.name && <p className="user-menu-name">{user.name}</p>}
+                {user?.email && <p className="user-menu-email">{user.email}</p>}
+
+                {user?.isAdmin && (
+                  <button className="logout-btn" onClick={onOpenUsers}>
+                    Manage Users
+                  </button>
                 )}
 
                 <button className="logout-btn" onClick={onLogout}>

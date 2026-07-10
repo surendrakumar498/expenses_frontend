@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import ExpenseDashboard from "./components/ExpenseDashboard";
+import UsersAdmin from "./components/UsersAdmin";
 import "./App.css";
 
 const App = () => {
@@ -12,7 +13,6 @@ const App = () => {
     return stored ? JSON.parse(stored) : null;
   });
 
-  // "login" | "register" | "forgot" — teeno mein se ek hi dikhega
   const [view, setView] = useState("login");
 
   const handleAuthSuccess = (newToken, newUser) => {
@@ -30,7 +30,10 @@ const App = () => {
     setView("login");
   };
 
-  // JAB TAK LOGIN NAHI, TAB TAK DASHBOARD DIKHEGA HI NAHI
+  if (view === "users") {
+    return <UsersAdmin onBack={() => setView("dashboard")} />;
+  }
+
   if (!token) {
     if (view === "register") {
       return (
@@ -43,16 +46,23 @@ const App = () => {
     if (view === "forgot") {
       return <ForgotPassword switchToLogin={() => setView("login")} />;
     }
+
     return (
-     <Login
-  onLoginSuccess={handleAuthSuccess}
-  switchToRegister={() => setView("register")}
-  switchToForgot={() => setView("forgot")}
-/>
+      <Login
+        onLoginSuccess={handleAuthSuccess}
+        switchToRegister={() => setView("register")}
+        switchToForgot={() => setView("forgot")}
+      />
     );
   }
 
-  return <ExpenseDashboard user={user} onLogout={handleLogout} />;
+  return (
+    <ExpenseDashboard
+      user={user}
+      onLogout={handleLogout}
+      onOpenUsers={() => setView("users")}
+    />
+  );
 };
 
 export default App;
