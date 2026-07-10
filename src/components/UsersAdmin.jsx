@@ -24,7 +24,7 @@ const UsersAdmin = ({ onBack }) => {
       const data = await res.json();
 
       if (!res.ok || !data.success) {
-        setError(data.message || "Users load nahi ho paye");
+        setError(data.message || "Failed to load users");
         return;
       }
 
@@ -42,7 +42,7 @@ const UsersAdmin = ({ onBack }) => {
   }, []);
 
   const handleDelete = async (id, name) => {
-    const confirmDelete = window.confirm(`Kya aap "${name}" ko delete karna chahte hain? Ye undo nahi ho sakta.`);
+    const confirmDelete = window.confirm(`Are you sure you want to delete "${name}"? or Cancel to keep it.`);
     if (!confirmDelete) return;
 
     try {
@@ -55,7 +55,7 @@ const UsersAdmin = ({ onBack }) => {
       const data = await res.json();
 
       if (!res.ok || !data.success) {
-        alert(data.message || "Delete fail ho gaya");
+        alert(data.message || `Failed to delete ${name}. Please try again.`);
         return;
       }
 
