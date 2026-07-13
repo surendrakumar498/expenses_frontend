@@ -28,11 +28,12 @@ const Register = ({ onRegisterSuccess, switchToLogin }) => {
       setError("Please enter a valid email address (e.g. name@example.com)");
       return;
     }
+const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
 
-    if (password.length < 6) {
-      setError("Password must be at least 6 characters long.");
-      return;
-    }
+if (!PASSWORD_REGEX.test(password)) {
+  setError("Password must be at least 8 characters long and include both letters and numbers.");
+  return;
+}
 
     try {
       setLoading(true);
