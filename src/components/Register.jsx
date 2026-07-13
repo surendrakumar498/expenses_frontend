@@ -34,12 +34,12 @@ const Register = ({ onRegisterSuccess, switchToLogin }) => {
     }
 
     if (!PASSWORD_REGEX.test(password)) {
-      setError("Password kam se kam 8 characters ka ho aur usme letters + numbers dono hone chahiye.");
+      setError("Password must be at least 8 characters long and include both letters and numbers.");
       return;
     }
 
     if (password !== confirmPassword) {
-      setError("Password aur Confirm Password match nahi kar rahe.");
+      setError("Password and Confirm Password do not match.");
       return;
     }
 

@@ -809,7 +809,7 @@ const ExpenseDashboard = ({ user, onLogout, onOpenUsers }) => {
             </table>
           </div>
 
-          {/* PAGINATION CONTROLS (naya) */}
+          {/* PAGINATION CONTROLS */}
           {revisedData.length > ITEMS_PER_PAGE && (
             <div className="pagination-controls">
               <button
