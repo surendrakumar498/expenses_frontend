@@ -3,13 +3,17 @@ import React, { useState } from "react";
 import { MoonLoader } from "react-spinners";
 import Swal from "sweetalert2";
 
+const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
+
 const Register = ({ onRegisterSuccess, switchToLogin }) => {
   const API_URL = `${import.meta.env.VITE_BACKEND_URL}/api/auth`;
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -19,8 +23,8 @@ const Register = ({ onRegisterSuccess, switchToLogin }) => {
     e.preventDefault();
     setError("");
 
-    if (!name || !email || !password) {
-      setError("All field are required");
+    if (!name || !email || !password || !confirmPassword) {
+      setError("All fields are required");
       return;
     }
 
@@ -28,12 +32,16 @@ const Register = ({ onRegisterSuccess, switchToLogin }) => {
       setError("Please enter a valid email address (e.g. name@example.com)");
       return;
     }
-const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
 
-if (!PASSWORD_REGEX.test(password)) {
-  setError("Password must be at least 8 characters long and include both letters and numbers.");
-  return;
-}
+    if (!PASSWORD_REGEX.test(password)) {
+      setError("Password kam se kam 8 characters ka ho aur usme letters + numbers dono hone chahiye.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Password aur Confirm Password match nahi kar rahe.");
+      return;
+    }
 
     try {
       setLoading(true);
@@ -62,7 +70,7 @@ if (!PASSWORD_REGEX.test(password)) {
         confirmButtonColor: "#4a3aff",
       });
 
-     switchToLogin();
+      switchToLogin();
     } catch (err) {
       console.log(err);
       setError("Something went wrong. Try again.");
@@ -118,12 +126,30 @@ if (!PASSWORD_REGEX.test(password)) {
           </button>
         </div>
 
+        <div className="password-field-wrapper">
+          <input
+            type={showConfirmPassword ? "text" : "password"}
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+
+          <button
+            type="button"
+            className="toggle-password-btn"
+            onClick={() => setShowConfirmPassword((prev) => !prev)}
+            tabIndex={-1}
+          >
+            {showConfirmPassword ? "👁️" : "👁️‍🗨️"}
+          </button>
+        </div>
+
         <button type="submit" disabled={loading}>
           {loading ? "Registering..." : "Register"}
         </button>
 
         <p className="auth-switch">
-       Already have an account? <span onClick={switchToLogin}>Login</span>
+          Already have an account? <span onClick={switchToLogin}>Login Here</span>
         </p>
       </form>
     </div>
