@@ -1,18 +1,24 @@
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
 
-*{
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-body{
+
+body {
   background: #f5f5f5;
   font-family: Arial, sans-serif;
   overflow-x: hidden;
 }
 
-/* ================= MAIN CONTAINER ================= */
+/* ============================================================
+   MAIN CONTAINER
+   ============================================================ */
 
-.memo-container{
+.memo-container {
   width: 95%;
   max-width: 100%;
   margin: 20px auto;
@@ -22,55 +28,160 @@ body{
   overflow: hidden;
 }
 
-/* ================= HEADER ================= */
+/* ============================================================
+   TOP HEADER (title, welcome banner, clock, user menu)
+   ============================================================ */
 
-.top-header{
+.top-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 10px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 14px 24px;
+  background: #ffffff;
+  border-bottom: 1px solid #eeeeee;
   margin-bottom: 20px;
-  font-size: 22px;
-  font-weight: bold;
+}
+
+.memo-title {
+  font-size: 20px;
+  font-weight: 700;
   color: #2f2f8f;
+  white-space: nowrap;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
   flex-wrap: wrap;
 }
 
-/* ================= DYNAMIC DATE TIME ================= */
+/* --- Welcome banner --- */
 
-.memo-title{
-  font-size: 22px;
-  font-weight: bold;
-  color: #2f2f8f;
+.welcome-banner {
+  display: flex;
+  align-items: center;
+  background: #f4f2ff;
+  padding: 6px 14px;
+  border-radius: 999px;
 }
 
-.live-date-time{
-  font-size: 18px;
+.welcome-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #4a3aff;
+  white-space: nowrap;
+}
+
+/* --- Live clock --- */
+
+.live-date-time {
+  font-size: 13px;
   font-weight: 600;
   color: #d8101a;
-  text-align: right;
+  white-space: nowrap;
 }
 
-/* ================= WRAPPER ================= */
+/* --- User menu (avatar + dropdown) --- */
 
-.table-wrapper{
+.user-menu-wrapper {
+  position: relative;
+}
+
+.user-icon-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, #4a3aff, #6c5ce7);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease;
+}
+
+.user-icon-btn:hover {
+  transform: scale(1.06);
+}
+
+.user-menu-popup {
+  position: absolute;
+  top: 48px;
+  right: 0;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  padding: 14px;
+  min-width: 200px;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  animation: dropIn 0.18s ease;
+}
+
+.user-menu-name {
+  margin: 0;
+  font-weight: 700;
+  font-size: 14px;
+  color: #1a1a1a;
+}
+
+.user-menu-email {
+  margin: 0 0 6px;
+  font-size: 12px;
+  color: #777777;
+  word-break: break-all;
+}
+
+.logout-btn {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 9px 10px;
+  border: none;
+  border-radius: 6px;
+  background: #f4f2ff;
+  color: #4a3aff;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.logout-btn:last-child {
+  background: #fdeceb;
+  color: #e74c3c;
+}
+
+.logout-btn:hover {
+  filter: brightness(0.95);
+}
+
+/* ============================================================
+   FORM SECTIONS (Original / Revised expense forms)
+   ============================================================ */
+
+.table-wrapper {
   display: flex;
   gap: 20px;
   align-items: flex-start;
 }
 
-/* ================= SECTION ================= */
-
-.section{
+.section {
   flex: 1;
   border: 2px solid #2f2f8f;
   background: #fff;
   overflow: hidden;
 }
 
-/* ================= SECTION TITLE ================= */
-
-.section-title{
+.section-title {
   text-align: center;
   padding: 14px;
   font-size: 24px;
@@ -79,16 +190,12 @@ body{
   border-bottom: 2px solid #2f2f8f;
 }
 
-/* ================= FORM ROW ================= */
-
-.table-row{
+.table-row {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
 }
 
-/* ================= HEADING ================= */
-
-.heading div{
+.heading div {
   border-right: 1px solid #2f2f8f;
   border-bottom: 2px solid #2f2f8f;
   padding: 12px;
@@ -99,19 +206,15 @@ body{
   font-size: 15px;
 }
 
-.heading div:last-child{
+.heading div:last-child {
   border-right: none;
 }
 
-/* ================= BODY ================= */
-
-.body-row{
+.body-row {
   min-height: 120px;
 }
 
-/* ================= CELL ================= */
-
-.table-cell{
+.table-cell {
   border-right: 1px solid #2f2f8f;
   padding: 12px;
   display: flex;
@@ -119,14 +222,12 @@ body{
   justify-content: center;
 }
 
-.table-cell:last-child{
+.table-cell:last-child {
   border-right: none;
 }
 
-/* ================= INPUTS ================= */
-
 .table-cell input,
-.am-pm-select{
+.am-pm-select {
   width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
@@ -135,35 +236,39 @@ body{
   font-size: 14px;
 }
 
-/* ================= TIME ================= */
-
-.time-wrapper{
+.time-wrapper {
   display: flex;
   gap: 10px;
   align-items: center;
 }
 
-.time-input{
+.time-input {
   flex: 1;
 }
 
-/* ================= FILE NAME ================= */
-
-.file-name{
+.file-name {
   margin-top: 8px;
   font-size: 13px;
   color: green;
   word-break: break-word;
 }
 
-/* ================= BUTTON ================= */
-
-.btn-wrapper{
-  padding: 20px;
-  text-align: end;
+.mobile-label {
+  display: none;
 }
 
-.btn-wrapper button{
+/* ============================================================
+   BUTTONS (submit / cancel / edit / delete / preview / download)
+   ============================================================ */
+
+.btn-wrapper {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  justify-content: flex-end;
+}
+
+.btn-wrapper button {
   padding: 6px 18px;
   border: none;
   background: #2f2f8f;
@@ -174,214 +279,10 @@ body{
   transition: 0.3s;
 }
 
-.btn-wrapper button:hover{
+.btn-wrapper button:hover {
   background: #1e1e6d;
 }
 
-/* ================= TABLE ================= */
-
-.data-table-wrapper{
-  width: 100%;
-  overflow-x: auto;
-}
-
-table{
-  width: 100%;
-  border-collapse: collapse;
-  min-width: 600px;
-}
-
-table th,
-table td{
-  border: 1px solid #2f2f8f;
-  padding: 2px;
-  text-align: center;
-  font-size: 14px;
-}
-
-table th{
-  background: #2f2f8f;
-  color: white;
-}
-
-.loader-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.35);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999999;
-}
-
-.loader-circle {
-  width: 110px;
-  height: 110px;
-  border-radius: 50%;
-  background: #ffffff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  /* Floating Effect */
-  box-shadow: 
-    0 12px 35px rgba(0, 0, 0, 0.45),
-    0 0 25px rgba(255, 255, 255, 0.8);
-
-  transform: translateY(-5px);
-}
-
-/* Date */
-.mobile-label {
-  display: none;
-}
-
-@media (max-width: 768px) {
-  .mobile-label {
-    display: block;
-    font-size: 14px;
-    font-weight: 600;
-    color: #333;
-    margin-bottom: 6px;
-  }
-}
-/* ================= ACTION BUTTONS ================= */
-
-.action-buttons{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-top: 25px;
-}
-/* ================= VIEW BUTTON ================= */
-.preview-btn{
-  padding: 7px 14px;
-  border: none;
-  background: green;
-  color: white;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: 0.3s ease;
-}
-
-.preview-btn:hover{
-  background: darkgreen;
-  transform: translateY(-2px);
-}
-/* ================= DOWNLOAD BUTTON ================= */
-.download-btn{
-  padding: 2px 11px;
-  background: #007bff;
-  color: white !important;
-  border-radius: 5px;
-  text-decoration: none;
-  display: inline-block;
-  transition: 0.3s ease;
-  font-size: 11px;
-}
-
-.download-btn:hover{
-  background: #0056b3;
-  transform: translateY(-2px);
-}
-
-/* ================= DELETE BUTTON ================= */
-
-.delete-btn{
-  padding: 7px 14px;
-  border: none;
-  background: red;
-  color: white;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: 0.3s ease;
-}
-.delete-btn:hover{
-  background: darkred;
-  transform: translateY(-2px);
-}
-
-/* ================= FILE NAME ================= */
-
-.uploaded-file-name{
-  font-size: 12px;
-  color: #333;
-  word-break: break-word;
-  text-align: center;
-  margin-top: 5px;
-}
-
-/* ================= IMAGE MODAL ================= */
-
-.image-modal{
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  background: rgba(0,0,0,0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-  padding: 20px;
-  animation: fadeIn 0.3s ease;
-}
-
-/* ================= MODAL CONTENT ================= */
-
-.modal-content{
-  position: relative;
-  background: white;
-  padding: 10px;
-  border-radius: 12px;
-  max-width: 90%;
-  max-height: 90vh;
-  overflow: auto;
-  transform: scale(0.7);
-  opacity: 0;
-  animation: zoomIn 0.35s ease forwards;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-}
-
-/* ================= MODAL IMAGE ================= */
-
-.modal-content img{
-  width: 100%;
-  max-width: 700px;
-  height: auto;
-  border-radius: 8px;
-  display: block;
-}
-
-/* ================= CLOSE BUTTON ================= */
-
-.close-btn{
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: red;
-  color: white;
-  border: none;
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
-  cursor: pointer;
-  font-size: 16px;
-  transition: 0.3s ease;
-}
-
-.close-btn:hover{
-  background: darkred;
-  transform: rotate(90deg);
-}
-
-/* EDIT BUTTON */
 .edit-btn {
   background-color: #4a3aff;
   color: #fff;
@@ -397,7 +298,6 @@ table th{
   background-color: #372bd6;
 }
 
-/* CANCEL BUTTON (edit mode) */
 .cancel-btn {
   background-color: #e0e0e0;
   color: #333;
@@ -414,477 +314,101 @@ table th{
   background-color: #cccccc;
 }
 
-/* ACTION BUTTONS WRAPPER (Edit + Delete ek row me) */
+.preview-btn {
+  padding: 7px 14px;
+  border: none;
+  background: green;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.preview-btn:hover {
+  background: darkgreen;
+  transform: translateY(-2px);
+}
+
+.download-btn {
+  padding: 2px 11px;
+  background: #007bff;
+  color: white !important;
+  border-radius: 5px;
+  text-decoration: none;
+  display: inline-block;
+  transition: 0.3s ease;
+  font-size: 11px;
+}
+
+.download-btn:hover {
+  background: #0056b3;
+  transform: translateY(-2px);
+}
+
+.delete-btn {
+  padding: 7px 14px;
+  border: none;
+  background: red;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.delete-btn:hover {
+  background: darkred;
+  transform: translateY(-2px);
+}
+
 .action-buttons {
   display: flex;
-  gap: 8px;
+  justify-content: center;
   align-items: center;
+  gap: 10px;
   flex-wrap: wrap;
+  margin-top: 25px;
 }
 
-/* BTN WRAPPER already exists for Submit — cancel button ke liye alignment */
-.btn-wrapper {
-  display: flex;
-  align-items: center;
-}
-
-/* ================= ANIMATION ================= */
-
-@keyframes fadeIn{
-
-  from{
-    opacity: 0;
-  }
-
-  to{
-    opacity: 1;
-  }
-}
-
-@keyframes zoomIn{
-
-  from{
-    transform: scale(0.7);
-    opacity: 0;
-  }
-  to{
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-/* ================= MOBILE LARGE ================= */
-
-@media (max-width: 992px){
-
-  .table-wrapper{
-    flex-direction: column;
-  }
-
-  .section{
-    width: 100%;
-  }
-}
-
-/* ================= TABLET ================= */
-
-@media (max-width: 768px){
-
-  .memo-container{
-    width: 98%;
-    padding: 10px;
-  }
-
-  .top-header{
-    font-size: 18px;
-  }
-
-  .section-title{
-    font-size: 20px;
-  }
-
-  .table-row{
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .heading div{
-    font-size: 13px;
-    padding: 10px 6px;
-  }
-
-  .table-cell{
-    padding: 10px;
-  }
-
-  .btn-wrapper button{
-    width: 100%;
-  }
-
-  .modal-content{
-    width: 100%;
-    max-width: 100%;
-    padding: 12px;
-  }
-
-  .modal-content img{
-    max-width: 100%;
-  }
-  .action-buttons{
-    flex-direction: row;
-    justify-content: center;
-    gap: 6px;
-    flex-wrap: wrap;
-  }
-  .preview-btn,
-  .download-btn,
-  .delete-btn{
-    width: auto;
-    min-width: 80px;
-    font-size: 12px;
-    padding: 6px 10px;
-    text-align: center;
-  }
-}
-
-/* ================= MOBILE ================= */
-
-
-/* ===== AUTH PAGES (Login / Register) ===== */
-
-.auth-container {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #f4f4fb;
-  padding: 20px;
-}
-
-.auth-card {
-  background: #fff;
-  padding: 32px 28px;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  width: 100%;
-  max-width: 360px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.auth-card h2 {
-  text-align: center;
-  color: #4a3aff;
-  margin-bottom: 6px;
-}
-
-.auth-card input {
-  padding: 10px 12px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 14px;
-  outline: none;
-}
-
-.auth-card input:focus {
-  border-color: #4a3aff;
-}
-
-.password-field-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.password-field-wrapper input {
-  width: 100%;
-  padding-right: 38px;
-}
-
-.toggle-password-btn {
-  position: absolute;
-  right: 8px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-  padding: 2px 4px;
-  line-height: 1;
-}
-
-.auth-card button[type="submit"] {
-  background-color: #4a3aff;
-  color: #fff;
-  border: none;
-  padding: 10px;
-  border-radius: 6px;
-  font-size: 15px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.auth-card button[type="submit"]:hover {
-  background-color: #372bd6;
-}
-
-.auth-card button[type="submit"]:disabled {
-  background-color: #a89dff;
-  cursor: not-allowed;
-}
-
-.auth-error {
-  background-color: #ffe6e6;
-  color: #d32f2f;
-  padding: 8px 10px;
-  border-radius: 6px;
-  font-size: 13px;
-  text-align: center;
-}
-
-.auth-switch {
-  text-align: center;
-  font-size: 13px;
-  color: #555;
-}
-
-.auth-switch span {
-  color: #4a3aff;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-.auth-switch span:hover {
-  text-decoration: underline;
-}
-
-/* ===== TOP HEADER (with logout) ===== */
-
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.user-menu-wrapper {
-  position: relative;
-}
-
-.user-icon-btn {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background-color: #4a3aff;
-  color: #fff;
-  border: none;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.2s ease;
-}
-
-.user-icon-btn:hover {
-  background-color: #372bd6;
-}
-
-.user-menu-popup {
-  position: absolute;
-  top: 44px;
-  right: 0;
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-  padding: 14px;
-  min-width: 180px;
-  z-index: 100;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.user-menu-name {
-  font-size: 14px;
-  font-weight: 700;
-  color: #333;
-  margin: 0;
-}
-
-.user-menu-email {
+.uploaded-file-name {
   font-size: 12px;
-  color: #777;
-  margin: 0 0 6px 0;
-  word-break: break-all;
-}
-
-.logout-btn {
-  background-color: #ff4444;
-  color: #fff;
-  border: none;
-  padding: 6px 14px;
-  border-radius: 6px;
-  font-size: 13px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-  width: 100%;
-}
-
-.logout-btn:hover {
-  background-color: #d63636;
-}
-
-
-/* forgot password here css */
-
-/* ===========================
-   Forgot Password CSS
-=========================== */
-
-.auth-container {
-  min-height: 100vh;
-  background: #f5f7fb;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-}
-
-.auth-card {
-  width: 100%;
-  max-width: 430px;
-  background: #fff;
-  padding: 35px 30px;
-  border-radius: 14px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-}
-
-.auth-card h2 {
+  color: #333;
+  word-break: break-word;
   text-align: center;
-  margin-bottom: 25px;
-  color: #222;
-  font-size: 28px;
+  margin-top: 5px;
 }
 
-.auth-card form {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
+/* ============================================================
+   DATA TABLE
+   ============================================================ */
 
-.auth-card input {
+.data-table-wrapper {
   width: 100%;
-  padding: 13px 15px;
-  border: 1px solid #d7d7d7;
-  border-radius: 8px;
-  font-size: 15px;
-  transition: 0.3s;
-  outline: none;
-  box-sizing: border-box;
+  overflow-x: auto;
 }
 
-.auth-card input:focus {
-  border-color: #4a3aff;
-  box-shadow: 0 0 0 3px rgba(74, 58, 255, 0.15);
-}
-
-.auth-card button {
+table {
   width: 100%;
-  background: #4a3aff;
-  color: #fff;
-  border: none;
-  padding: 13px;
-  border-radius: 8px;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: .3s;
+  border-collapse: collapse;
+  min-width: 600px;
 }
 
-.auth-card button:hover:not(:disabled) {
-  background: #3829d6;
-}
-
-.auth-card button:disabled {
-  opacity: .6;
-  cursor: not-allowed;
-}
-
-/* Password */
-
-.password-field-wrapper {
-  position: relative;
-}
-
-.password-field-wrapper input {
-  padding-right: 55px;
-}
-
-.toggle-password-btn {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: transparent !important;
-  color: #666 !important;
-  border: none !important;
-  width: auto !important;
-  padding: 0 !important;
-  cursor: pointer;
-  font-size: 20px;
-}
-
-.toggle-password-btn:hover {
-  color: #4a3aff !important;
-}
-
-/* Success */
-
-.auth-card p {
-  text-align: center;
-  margin: 10px 0;
-}
-
-.auth-error {
-  color: #d93025;
-  background: #ffe9e8;
-  border: 1px solid #ffc5c2;
-  padding: 10px;
-  border-radius: 8px;
-  font-size: 14px;
-}
-
-.auth-success {
-  color: #188038;
-  background: #e6f4ea;
-  border: 1px solid #b7dfc1;
-  padding: 10px;
-  border-radius: 8px;
-  font-size: 14px;
-}
-
-/* Login Link */
-
-.auth-switch {
-  margin-top: 20px;
+table th,
+table td {
+  border: 1px solid #2f2f8f;
+  padding: 2px;
   text-align: center;
   font-size: 14px;
 }
 
-.auth-switch span {
-  color: #4a3aff;
-  cursor: pointer;
-  font-weight: 600;
+table th {
+  background: #2f2f8f;
+  color: white;
 }
 
-.auth-switch span:hover {
-  text-decoration: underline;
-}
+/* ============================================================
+   PAGINATION
+   ============================================================ */
 
-/* Loader */
-
-.loader-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(255,255,255,.75);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-}
-
-.loader-circle {
-  width: 95px;
-  height: 95px;
-  background: white;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 8px 30px rgba(0,0,0,.15);
-}
-
-/* pagination css here  */
 .pagination-controls {
   display: flex;
   align-items: center;
@@ -911,10 +435,241 @@ table th{
   font-size: 14px;
   color: #333;
 }
-/* end  */
 
+/* ============================================================
+   LOADER
+   ============================================================ */
 
-/* ===== Users Admin Page ===== */
+.loader-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999999;
+}
+
+.loader-circle {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow:
+    0 12px 35px rgba(0, 0, 0, 0.45),
+    0 0 25px rgba(255, 255, 255, 0.8);
+  transform: translateY(-5px);
+}
+
+/* ============================================================
+   IMAGE MODAL
+   ============================================================ */
+
+.image-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  padding: 20px;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+  position: relative;
+  background: white;
+  padding: 10px;
+  border-radius: 12px;
+  max-width: 90%;
+  max-height: 90vh;
+  overflow: auto;
+  transform: scale(0.7);
+  opacity: 0;
+  animation: zoomIn 0.35s ease forwards;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.modal-content img {
+  width: 100%;
+  max-width: 700px;
+  height: auto;
+  border-radius: 8px;
+  display: block;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: red;
+  color: white;
+  border: none;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.3s ease;
+}
+
+.close-btn:hover {
+  background: darkred;
+  transform: rotate(90deg);
+}
+
+/* ============================================================
+   AUTH PAGES (Login / Register / Forgot Password)
+   ============================================================ */
+
+.auth-container {
+  min-height: 100vh;
+  background: #f5f7fb;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 430px;
+  background: #fff;
+  padding: 35px 30px;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.auth-card h2 {
+  text-align: center;
+  margin-bottom: 6px;
+  color: #222;
+  font-size: 28px;
+}
+
+.auth-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.auth-card input {
+  width: 100%;
+  padding: 13px 15px;
+  border: 1px solid #d7d7d7;
+  border-radius: 8px;
+  font-size: 15px;
+  outline: none;
+  box-sizing: border-box;
+  transition: 0.3s;
+}
+
+.auth-card input:focus {
+  border-color: #4a3aff;
+  box-shadow: 0 0 0 3px rgba(74, 58, 255, 0.15);
+}
+
+.auth-card button[type="submit"] {
+  width: 100%;
+  background: #4a3aff;
+  color: #fff;
+  border: none;
+  padding: 13px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.auth-card button[type="submit"]:hover:not(:disabled) {
+  background: #3829d6;
+}
+
+.auth-card button[type="submit"]:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.auth-card p {
+  text-align: center;
+  margin: 10px 0;
+}
+
+.password-field-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-field-wrapper input {
+  padding-right: 55px;
+}
+
+.toggle-password-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent !important;
+  color: #666 !important;
+  border: none !important;
+  width: auto !important;
+  padding: 0 !important;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.toggle-password-btn:hover {
+  color: #4a3aff !important;
+}
+
+.auth-error {
+  color: #d93025;
+  background: #ffe9e8;
+  border: 1px solid #ffc5c2;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.auth-success {
+  color: #188038;
+  background: #e6f4ea;
+  border: 1px solid #b7dfc1;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.auth-switch {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 14px;
+  color: #555;
+}
+
+.auth-switch span {
+  color: #4a3aff;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.auth-switch span:hover {
+  text-decoration: underline;
+}
+
+/* ============================================================
+   USERS ADMIN PAGE
+   ============================================================ */
 
 .users-admin-page {
   width: 100%;
@@ -968,7 +723,6 @@ table th{
   font-size: 15px;
 }
 
-/* Responsive grid: cards wrap nicely on wide screens, stack on mobile */
 .users-admin-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -997,7 +751,7 @@ table th{
   display: flex;
   align-items: center;
   gap: 12px;
-  min-width: 0; /* text ellipsis ke liye zaroori */
+  min-width: 0;
 }
 
 .user-avatar {
@@ -1065,147 +819,261 @@ table th{
   cursor: not-allowed;
 }
 
-/* ===== Animations ===== */
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
 
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
 }
 
+@keyframes zoomIn {
+  from { transform: scale(0.7); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
 @keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes dropIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+/* --- Large tablets / small laptops --- */
+@media (max-width: 992px) {
+  .table-wrapper {
+    flex-direction: column;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+
+  .section {
+    width: 100%;
   }
 }
 
-/* Responsive */
+/* --- Tablet --- */
+@media (max-width: 768px) {
+  .memo-container {
+    width: 98%;
+    padding: 10px;
+  }
 
-@media (max-width:480px){
+  .top-header {
+    padding: 12px 16px;
+  }
 
-.auth-card{
-    padding:25px 20px;
+  .memo-title {
+    font-size: 18px;
+  }
+
+  .header-right {
+    gap: 10px;
+  }
+
+  .welcome-name,
+  .live-date-time {
+    font-size: 12px;
+  }
+
+  .section-title {
+    font-size: 20px;
+  }
+
+  .table-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .heading div {
+    font-size: 13px;
+    padding: 10px 6px;
+  }
+
+  .table-cell {
+    padding: 10px;
+  }
+
+  .btn-wrapper button {
+    width: 100%;
+  }
+
+  .modal-content {
+    width: 100%;
+    max-width: 100%;
+    padding: 12px;
+  }
+
+  .modal-content img {
+    max-width: 100%;
+  }
+
+  .action-buttons {
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .preview-btn,
+  .download-btn,
+  .delete-btn {
+    width: auto;
+    min-width: 80px;
+    font-size: 12px;
+    padding: 6px 10px;
+    text-align: center;
+  }
+
+  .mobile-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 6px;
+  }
 }
 
-.auth-card h2{
-    font-size:24px;
-}
-
-.auth-card input,
-.auth-card button{
-    font-size:14px;
-}
-
-}
-
-/* End  */
-
-@media (max-width: 576px){
-
-  .memo-container{
+/* --- Small tablet / large phone --- */
+@media (max-width: 576px) {
+  .memo-container {
     padding: 8px;
   }
 
-  .top-header{
-    flex-direction: column;
-    align-items: flex-start;
-    font-size: 16px;
-    gap: 5px;
-  }
-
-  .live-date-time{
-    font-size: 14px;
-  }
-
-  .table-row{
+  .table-row {
     grid-template-columns: 1fr;
   }
 
-  .heading{
+  .heading {
     display: none;
   }
 
-  .table-cell{
+  .table-cell {
     border-right: none;
     border-bottom: 1px solid #ddd;
     padding: 10px;
   }
 
-  .time-wrapper{
+  .time-wrapper {
     flex-direction: column;
     width: 100%;
   }
 
   .table-cell input,
-  .am-pm-select{
+  .am-pm-select {
     font-size: 13px;
   }
 
-  table{
+  table {
     min-width: 500px;
   }
 
   table th,
-  table td{
+  table td {
     font-size: 12px;
     padding: 8px;
   }
 
-  .action-buttons{
-    flex-direction: row;
-    justify-content: center;
-    gap: 5px;
-    flex-wrap: wrap;
-  }
-
   .preview-btn,
   .download-btn,
-  .delete-btn{
+  .delete-btn {
     width: auto;
     min-width: 70px;
     font-size: 11px;
     padding: 7px 8px;
   }
+
   .download-btn {
     padding: 2px 5px;
     width: 100px;
   }
-  .modal-content{
+
+  .modal-content {
     width: 100%;
     padding: 10px;
   }
 
-  .modal-content img{
+  .modal-content img {
     max-width: 100%;
   }
 }
 
-/* ================= EXTRA SMALL ================= */
+/* --- Mobile --- */
+@media (max-width: 480px) {
+  .top-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
 
-@media (max-width: 400px){
+  .header-right {
+    width: 100%;
+    justify-content: space-between;
+  }
 
-  .section-title{
+  .welcome-banner {
+    order: 2;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .live-date-time {
+    order: 1;
+  }
+
+  .user-menu-wrapper {
+    order: 1;
+  }
+
+  .welcome-name {
+    white-space: normal;
+    text-align: center;
+  }
+
+  .user-menu-popup {
+    right: -8px;
+    min-width: 180px;
+  }
+
+  .auth-card {
+    padding: 25px 20px;
+  }
+
+  .auth-card h2 {
+    font-size: 24px;
+  }
+
+  .auth-card input,
+  .auth-card button {
+    font-size: 14px;
+  }
+}
+
+/* --- Extra small --- */
+@media (max-width: 400px) {
+  .section-title {
     font-size: 18px;
   }
 
-  .btn-wrapper button{
+  .btn-wrapper button {
     padding: 10px;
     font-size: 14px;
     width: 100%;
   }
 
-  .image-modal{
+  .image-modal {
     padding: 10px;
   }
-  .modal-content{
+
+  .modal-content {
     padding: 10px;
     border-radius: 10px;
   }
-  .close-btn{
+
+  .close-btn {
     width: 30px;
     height: 30px;
     font-size: 14px;

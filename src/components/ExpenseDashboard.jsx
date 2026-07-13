@@ -17,6 +17,7 @@ const ExpenseDashboard = ({ user, onLogout, onOpenUsers }) => {
   const [revisedLoading, setRevisedLoading] = useState(false);
 
   const [currentDateTime, setCurrentDateTime] = useState("");
+  const [welcomeDateTime, setWelcomeDateTime] = useState("");
 
   const [previewImage, setPreviewImage] = useState("");
   const [showModal, setShowModal] = useState(false);
@@ -376,30 +377,41 @@ const ExpenseDashboard = ({ user, onLogout, onOpenUsers }) => {
 
   /*DYNAMIC CLOCK */
   useEffect(() => {
-    const updateDateTime = () => {
-      const now = new Date();
-      const options = {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: true,
-      };
+  const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 
-      const formattedDateTime = now
-        .toLocaleString("en-IN", options)
-        .replace("am", "AM")
-        .replace("pm", "PM");
-      setCurrentDateTime(formattedDateTime);
+  const updateDateTime = () => {
+    const now = new Date();
+    const options = {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true,
     };
 
-    updateDateTime();
-    const interval = setInterval(updateDateTime, 1000);
+    const formattedDateTime = now
+      .toLocaleString("en-IN", options)
+      .replace("am", "AM")
+      .replace("pm", "PM");
+    setCurrentDateTime(formattedDateTime);
 
-    return () => clearInterval(interval);
-  }, []);
+    // "13-Jul-2026 [17:00:08]" jaisa 24-hour format, welcome banner ke liye
+    const day = String(now.getDate()).padStart(2, "0");
+    const month = monthNames[now.getMonth()];
+    const year = now.getFullYear();
+    const hours = String(now.getHours()).padStart(2, "0");
+    const minutes = String(now.getMinutes()).padStart(2, "0");
+    const seconds = String(now.getSeconds()).padStart(2, "0");
+    setWelcomeDateTime(`${day}-${month}-${year} [${hours}:${minutes}:${seconds}]`);
+  };
+
+  updateDateTime();
+  const interval = setInterval(updateDateTime, 1000);
+
+  return () => clearInterval(interval);
+}, []);
 
   return (
     <div className="memo-container">
@@ -410,10 +422,16 @@ const ExpenseDashboard = ({ user, onLogout, onOpenUsers }) => {
           </div>
         </div>
       )}
+
       <div className="top-header">
         <span className="memo-title">Finance Tracker</span>
 
-        <div className="header-right">
+                  <div className="header-right">
+                          <div className="welcome-banner">
+            <span className="welcome-name">
+              Welcome {user?.name} {user?.username ? `(${user.username})` : ""}
+            </span>
+          </div>
           <span className="live-date-time">{currentDateTime}</span>
 
           <div className="user-menu-wrapper" ref={userMenuRef}>
