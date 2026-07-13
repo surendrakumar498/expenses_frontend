@@ -62,7 +62,7 @@ const Login = ({ onLoginSuccess, switchToRegister, switchToForgot }) => {
         </div>
       )}
 
-      <form className="auth-card" onSubmit={handleSubmit}>
+      <form className="auth-card" onSubmit={handleSubmit} autoComplete="off">
         <h2>Login</h2>
 
         {error && <p className="auth-error">{error}</p>}
