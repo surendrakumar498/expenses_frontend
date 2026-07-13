@@ -9,7 +9,7 @@ const ExpenseDashboard = ({ user, onLogout, onOpenUsers }) => {
 
   // Har request me bhejne wala Authorization header
   const authHeader = () => {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     return token ? { Authorization: `Bearer ${token}` } : {};
   };
 

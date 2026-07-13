@@ -6,7 +6,7 @@ const UsersAdmin = ({ onBack }) => {
   const API_URL = `${import.meta.env.VITE_BACKEND_URL}/api/users`;
 
   const authHeader = () => {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     return token ? { Authorization: `Bearer ${token}` } : {};
   };
 
